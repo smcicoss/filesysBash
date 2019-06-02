@@ -1,0 +1,39 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+#·
+
+# catalogo
+# genera un archivo en cada carpeta con el nombre
+# 	'carpeta-nombre' y conteniendo el nombre de cada
+# 	fichero 
+
+# obtenemos el listado de subdirectorios de primer nivel
+busqueda=$(lssubdir "$1")
+result=$?
+if [ $result -eq 1 ]; then
+	echo "El direcotrio $1 no existe"
+	exit 1
+elif [ $result -eq 2 ]; then
+	exit 2
+fi
+
+ahora=$(date)
+
+oldIFS=$IFS
+IFS=$'\n'
+
+for carp in $busqueda; do
+	# Dir padre
+	directorio=$(dirname "$carp")
+	carpeta=$(basename "$carp")
+	# Registramos en directorio padre
+	nombref="$directorio/carpeta-$carpeta.dir"
+	echo "Carpeta $carpeta - $ahora" >$nombref
+	echo "-------------------------------------------------------------" >> $nombref
+	find "$carp" -maxdepth 1 -type f -iname "*" -printf "%f\n" >>$nombref
+
+	# Proceso recursivo
+	catalogo "$carp"
+done
+
+IFS=$oldIFS
