@@ -5,7 +5,7 @@
 	*Lista los subdirectorios de primer nivel*
 - **catalogo**    
 	*Genera un fichero por cada subdirectorio con el listado de los ficheros contenidos en él*
-- **delete-empty**    	
+- **delete-empty**    
 	*Borra los subdirectorios vacios*
 - **montaiso**    
 	*Monta una imagen ISO*
