@@ -1,5 +1,5 @@
 # filesysBash
-*Utilidades para el mantenimiento e información de ficheros, directorios, discos y particiones*
+##Utilidades para el mantenimiento e información de ficheros, directorios, discos y particiones
 
 - **lssubdir**    
 	*Lista los subdirectorios de primer nivel*
