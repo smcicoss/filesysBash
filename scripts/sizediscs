@@ -1,0 +1,12 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+#·
+
+IMPORTAR="str_repeat"
+source importar
+
+ahora=$(date)
+
+echo -en "$(str_repeat '-' 80)\n\e[1;37m$0\t$ahora\e[0m\n$(str_repeat '-' 80)\n"
+df -hT | grep -e "/dev/sd" -e "/dev/mapper" -e "@" | sort -k5nr
+echo -en "$(str_repeat '-' 80)\n"

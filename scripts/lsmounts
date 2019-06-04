@@ -1,0 +1,40 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+# ·
+#######################################################
+#			lsmounts
+#------------------------------------------------------
+#	Muestra particiones montadas
+#------------------------------------------------------
+# autor:	Simón Martínez <simon@cicoss.net>
+#######################################################
+
+ahora=$(date)
+
+cabecera=$(printf '\055%.0s' {1..80})
+cabecera+="\n\e[1;37m$0\t$ahora\e[0m\n"
+cabecera+=$(printf '\055%.0s' {1..80})
+
+echo -en "$cabecera\n"
+
+declare devices=$(df -h | grep -E "^/dev/|@" | cut -d " " -f 1 | sort -k1)
+declare -a devmontados=()
+
+tmpfile1=$(mktemp /tmp/DispositivosMontados.XXXXXX)
+trap "rm -f -- "$tmpfile1"" INT TERM HUP EXIT
+
+for d in $devices; do
+	findmnt -c -o SOURCE,TARGET $d | grep -E "^/dev/|@" >>$tmpfile1
+done
+
+tmpfile2=$(mktemp /tmp/DispositivosMontadosSort.XXXXXX)
+trap "rm -f -- "$tmpfile2"" INT TERM HUP EXIT
+
+#cat $tmpfile1 | sort -k2 >>$tmpfile2
+cat $tmpfile1 >>$tmpfile2
+
+while read linea; do
+   printf "%-30s -> %s\n" $linea
+done < $tmpfile2
+
+echo -en "$(printf '\055%.0s' {1..80})"
