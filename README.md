@@ -1,9 +1,9 @@
 # filesysBash
 ##Utilidades para el mantenimiento e información de ficheros, directorios, discos y particiones
 
-- **lsdisks**    
+- **lsdiscs**    
 	*Lista los discos activos en el sistema*
-- **lsusbdisks**    
+- **lsusbdiscs**    
 	*Lista los discos conectados por USB*
 - **lspart**    
 	*Lista las particiones accesibles*
@@ -11,6 +11,8 @@
 	*Lista los subdirectorios de primer nivel*
 - **lsmounts**    
 	*Lista las particiones y sistemas remotos montados*
+- **sizediscs**    
+	*Lista la ocupación de los discos*
 - **direext**    
 	*Lista atributos extendidos*
 - **catalogo**    
