@@ -1,0 +1,56 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+
+# montaiso
+# Monta una imagen iso
+# Uso: montaiso nombre-fichero.iso [nombre_directorio_montado]
+# Ejemplo:
+# 		montaiso "/home/simo/Datos/SOs/Linux/openSUSE/openSUSE-Leap-15.0/openSUSE-Leap-15.0-DVD-x86_64.iso" "Leap-15.0"
+
+if [ -z $1 ]; then
+	echo "Debe especificar la ruta a un fichero de imagen iso"
+	exit 1
+fi
+
+FISO="$1"
+
+if [ ! -f $FISO ];then
+	echo "El fichero $FISO no existe"
+	exit 1
+fi
+
+dirbase="/mnt/iso"
+
+if [ -z $2 ]; then
+	#si no se especifica nombre se da el nombre de la iso sin extension
+	declare fnombre=$(basename "$FISO")
+	#quitamos la extensión
+	declare nombre=${fnombre%.*}
+else
+	nombre="$2"
+fi
+
+
+echo "Preparando para montar '$nombre'"
+
+if [ -d "$dirbase/$nombre" ]; then
+	if $(df | grep "$dirbase/$nombre" 2>&1>/dev/null ); then
+		echo "El directorio '$dirbase/$nombre' está ocupado"
+		exit 2
+	fi
+	echo "El directorio '$dirbase/$nombre' ya existe"
+else
+	sudo install -d "$dirbase/$nombre"
+fi
+
+sudo mount -r -t iso9660 -o loop "$FISO" "$dirbase/$nombre" >/dev/null
+
+if [ $? -ne 0 ]; then
+	echo "ha ocurrido un error al montar $fnombre"
+	exit 3
+fi
+
+echo "ISO '$fnombre' montado correctamente:"
+df -hT $dirbase/$nombre
+
+exit 0

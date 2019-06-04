@@ -1,0 +1,44 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+
+# desmontaiso
+# Muestra una imagen iso
+# Uso: desmontaiso nombre_que_se_dió_con_montaiso
+# Ejemplo
+#		desmontaiso "Leap-15.0"
+
+if [ -z $1 ]; then
+	echo "Debe especificar el nombre de la ISO"
+	exit 1
+fi
+
+declare nombre="$1"
+declare dirbase="/mnt/iso"
+
+echo "Preparando para desmontar '$nombre'"
+
+if ! mount | grep "$nombre" >/dev/null; then
+	echo "'$nombre' no está montado"
+	exit 2
+fi
+
+if [ ! -d "$dirbase/$nombre" ]; then
+	echo "No existe $nombre montado en $dirbase/"
+	exit 2
+fi
+
+sudo umount "$dirbase/$nombre"
+if [ $? -ne 0 ]; then
+	echo "No se ha podido desmontar $nombre"
+	exit 3
+fi
+
+sudo rm -r "$dirbase/$nombre"
+if [ $? -eq 0 ]; then
+	echo "Desmontado correctamente"
+else
+	echo "No se ha podido eliminar $dirbase/$nombre"
+	exit 4
+fi
+
+exit 0

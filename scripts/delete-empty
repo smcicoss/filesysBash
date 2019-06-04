@@ -1,0 +1,71 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+# ·
+#######################################################
+#			delete-empty
+#------------------------------------------------------
+#	Elimina los subdirectorios vacíos
+#------------------------------------------------------
+# autor:	Simón Martínez <simon@cicoss.net>
+# fecha:	19-11-2016
+#------------------------------------------------------
+# Uso:
+# 	delete-empty [directorio]
+#
+#	Si no se especifica directorio se tomará el actual
+#######################################################
+
+# comprobamos si se especificó el path absoluto
+if [ $# -gt 0 ]; then
+	if [ $(expr substr "$1" 1 1) = "/" ]; then
+		# path absoluto
+		carpeta="$1"
+	else
+		# path relativo
+		carpeta="$PWD/$1"
+	fi
+else
+	# sin path -> directorio actual
+	carpeta="$PWD"
+fi
+
+carpeta="$(realpath $carpeta)"
+
+if [ ! -d "$carpeta" ]; then
+	echo "'$carpeta' no es un directorio"
+	echo "cancelo"
+	exit 2
+fi
+
+echo "Se van a eliminar todos los subdirectorios vacíos de '$carpeta'"
+read -p "¿Estás de acuerdo?(s/n) " resp
+
+case $resp in
+	[Ss]* )
+		echo "borrando ..."
+		;;
+	* )
+		echo "Cancelado"
+		exit 1
+		;;
+esac
+
+sync
+lista=$(find "$carpeta" -type d -empty)
+
+oldIFS=$IFS
+IFS=$'\n'
+
+while read -a subdir; do
+	rm -rf "$subdir"
+	padre="$(dirname $subdir)"
+	until [ "$(ls -A $padre)" ]; do
+		echo "$padre"
+		rm -rf "$padre"
+		padre="$(dirname "$padre")"
+	done
+done <<< "$lista"
+
+IFS=$oldIFS
+
+sync
