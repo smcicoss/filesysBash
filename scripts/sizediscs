@@ -1,12 +1,22 @@
 #! /bin/bash
 # -*- ENCODING: UTF-8 -*-
-#·
-
-IMPORTAR="str_repeat"
-source importar
+# ·
+#######################################################
+#			sizediscs
+#------------------------------------------------------
+#	Muestra el uso de los discos
+#------------------------------------------------------
+# autor:	Simón Martínez <simon@cicoss.net>
+#######################################################
 
 ahora=$(date)
 
-echo -en "$(str_repeat '-' 80)\n\e[1;37m$0\t$ahora\e[0m\n$(str_repeat '-' 80)\n"
-df -hT | grep -e "/dev/sd" -e "/dev/mapper" -e "@" | sort -k5nr
-echo -en "$(str_repeat '-' 80)\n"
+cabecera=$(printf '\055%.0s' {1..80})
+cabecera+="\n\e[1;37m$0\t$ahora\e[0m\n"
+cabecera+=$(printf '\055%.0s' {1..80})
+
+echo -en "$cabecera\n"
+
+df -hT | grep -e "/dev/sd" -e "/dev/mapper" -e "@" -e "Usados" 
+
+echo -en "$(printf '\055%.0s' {1..80})"
