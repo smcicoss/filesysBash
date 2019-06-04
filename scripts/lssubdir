@@ -1,9 +1,18 @@
 #! /bin/bash
 # -*- ENCODING: UTF-8 -*-
-#·
-
-# lssubdir
-# lista los sub-directorios
+# ·
+#######################################################
+#			lssubdir
+#------------------------------------------------------
+#	Lista los subdirectorios
+#------------------------------------------------------
+# autor:	Simón Martínez <simon@cicoss.net>
+#------------------------------------------------------
+# Uso:
+# 	lssubdir [directorio]
+#
+#	Si no se especifica directorio se tomará el actual
+#######################################################
 
 if [ -z "$1" ]; then
 	directorio="./"
@@ -14,7 +23,8 @@ else
 	directorio="$1/"
 fi
 
-directorio="$(readlink -f "$directorio")/"
+# Normalizamos el directorio
+directorio="$(realpath "$directorio")/"
 
 lectura=$(find "$directorio" -maxdepth 1 -type d ! -path "$directorio")
 if [ ${#lectura} -eq 0 ]; then

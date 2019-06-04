@@ -3,6 +3,8 @@
 
 - **lssubdir**    
 	*Lista los subdirectorios de primer nivel*
+- **direext**    
+	*Lista atributos extendidos*
 - **catalogo**    
 	*Genera un fichero por cada subdirectorio con el listado de los ficheros contenidos en él*
 - **delete-empty**    

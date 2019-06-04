@@ -1,0 +1,51 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+# ·
+#######################################################
+#			dirext
+#------------------------------------------------------
+#	Muestra atributos extendidos
+#------------------------------------------------------
+# autor:	Simón Martínez <simon@cicoss.net>
+#------------------------------------------------------
+# Uso:
+# 	delete-empty [directorio]
+#
+#	Si no se especifica directorio se tomará el actual
+#######################################################
+
+DEFAULT_PATH="./*"
+
+if [ -z "$1" ]; then
+	file_path="$DEFAULT_PATH"
+elif [ ! -r "$1" ]; then
+	echo "'$1' no se pùede leer"
+	exit 1
+elif [ -d "$1" ]; then
+	file_path="$1/*"
+else
+	file_path="$1"
+fi
+
+# Normalizamos
+file_path="$(realpath "$file_path")"
+
+oldIFS=$IFS
+IFS=$'\n'
+
+for file in $file_path; do
+	printf "%-s\n" $(ls --color -lhd $file) 
+	if [ -f $file ]; then
+		echo -en "\e[1;40;31m"
+	elif [ -d $file ]; then
+		echo -en "\e[1;40;33m"
+	fi
+	printf "\t-%-s\e[0m\n" $(file -bNpsi $file)
+	for atributo in $(getfattr --absolute-names -hP $file | grep -v "#"); do
+		echo -en "\e[0;40;32m"
+		printf "\t-%-s\n" $(getfattr --absolute-names -hP -n $atributo $file | grep -v "#")
+		echo -en "\e[0m"
+	done
+done
+
+IFS=$(echo -en $OLDIFS)

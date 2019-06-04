@@ -7,7 +7,6 @@
 #	Elimina los subdirectorios vacíos
 #------------------------------------------------------
 # autor:	Simón Martínez <simon@cicoss.net>
-# fecha:	19-11-2016
 #------------------------------------------------------
 # Uso:
 # 	delete-empty [directorio]
@@ -29,6 +28,7 @@ else
 	carpeta="$PWD"
 fi
 
+# Normalizamos
 carpeta="$(realpath $carpeta)"
 
 if [ ! -d "$carpeta" ]; then
