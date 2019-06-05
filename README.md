@@ -1,5 +1,6 @@
 # filesysBash
-##Utilidades para el mantenimiento e información de ficheros, directorios, discos y particiones##
+
+## Utilidades para el mantenimiento e información de ficheros, directorios, discos y particiones
 
 - **lsdiscs**    
 	*Lista los discos activos en el sistema*
