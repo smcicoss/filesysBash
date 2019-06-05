@@ -11,12 +11,14 @@
 
 ahora=$(date)
 
-cabecera=$(printf '\055%.0s' {1..80})
-cabecera+="\n\e[1;37m$0\t$ahora\e[0m\n"
-cabecera+=$(printf '\055%.0s' {1..80})
+printf '\055%.0s' {1..80}
 
-echo -en "$cabecera\n"
+echo -en "\n\e[1;37m"
+printf '%-40s%40s' "$0" "$ahora"
+echo -en "\e[0m\n"
+
+printf '\055%.0s' {1..80}; echo ""
 
 lsblk -io KNAME,TYPE,SIZE,MOUNTPOINT | grep -e "KNAME" -e "part" -e "crypt"
 
-echo -en "$(printf '\055%.0s' {1..80})"
+printf '\055%.0s' {1..80}; echo ""

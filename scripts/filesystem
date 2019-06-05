@@ -1,10 +1,10 @@
 #! /bin/bash
 # -*- ENCODING: UTF-8 -*-
-# ·
+#·
 #######################################################
-#			lsdiscs
+#			        lsusbdiscs
 #------------------------------------------------------
-#	Muestra los discos en el sistema
+#	Lista los discos usb
 #------------------------------------------------------
 # autor:	Simón Martínez <simon@cicoss.net>
 #######################################################
@@ -19,6 +19,6 @@ echo -en "\e[0m\n"
 
 printf '\055%.0s' {1..80}; echo ""
 
-lsblk -io KNAME,TYPE,SIZE,MODEL | grep -e "KNAME" -e "disk"
+lsblk -o NAME,TYPE,SIZE,MODEL,MOUNTPOINT
 
 printf '\055%.0s' {1..80}; echo ""

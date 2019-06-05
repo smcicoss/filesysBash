@@ -11,12 +11,14 @@
 
 ahora=$(date)
 
-cabecera=$(printf '\055%.0s' {1..80})
-cabecera+="\n\e[1;37m$0\t$ahora\e[0m\n"
-cabecera+=$(printf '\055%.0s' {1..80})
+printf '\055%.0s' {1..80}
 
-echo -en "$cabecera\n"
+echo -en "\n\e[1;37m"
+printf '%-40s%40s' "$0" "$ahora"
+echo -en "\e[0m\n"
+
+printf '\055%.0s' {1..80}; echo ""
 
 grep -Ff <(sudo hwinfo --disk --short) <(sudo hwinfo --usb --short) | grep -v "disk:"
 
-echo -en "$(printf '\055%.0s' {1..80})"
+printf '\055%.0s' {1..80}; echo ""

@@ -11,12 +11,12 @@
 
 ahora=$(date)
 
-cabecera=$(printf '\055%.0s' {1..80})
-cabecera+="\n\e[1;37m$0\t$ahora\e[0m\n"
-cabecera+=$(printf '\055%.0s' {1..80})
-
-echo -en "$cabecera\n"
+printf '\055%.0s' {1..80}
+echo -en "\n\e[1;37m"
+printf '%-40s%40s' "$0" "$ahora"
+echo -en "\e[0m\n"
+printf '\055%.0s' {1..80}; echo ""
 
 df -hT | grep -e "/dev/sd" -e "/dev/mapper" -e "@" -e "Usados" -e "Used"
 
-echo -en "$(printf '\055%.0s' {1..80})"
+printf '\055%.0s' {1..80}; echo ""

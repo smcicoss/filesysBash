@@ -11,6 +11,8 @@
 	*Lista los subdirectorios de primer nivel*
 - **lsmounts**    
 	*Lista las particiones y sistemas remotos montados*
+- **filesystem**    
+	*Lista la estructura completa de discos y particiones, así como punto de montaje*
 - **sizediscs**    
 	*Lista la ocupación de los discos*
 - **direext**    
