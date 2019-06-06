@@ -16,7 +16,15 @@
 	*Lista la estructura completa de discos y particiones, así como punto de montaje*
 - **sizediscs**    
 	*Lista la ocupación de los discos*
-- **direext**    
+- **indev**    
+	*Muestra el nombre dispositivo subyacente*
+- **fstype**    
+	*Muestra el tipo de sistema de ficheros subyacente*
+- **label**    
+	*Muestra la etiqueta del dispositivo subyacente*
+- **fsuuid**    
+	*Muestra el UUID del sistema de ficheros*
+- **dirext**    
 	*Lista atributos extendidos*
 - **catalogo**    
 	*Genera un fichero por cada subdirectorio con el listado de los ficheros contenidos en él*

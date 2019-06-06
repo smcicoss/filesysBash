@@ -1,0 +1,35 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+# ·
+#######################################################
+#			fstype
+#------------------------------------------------------
+#	Muestra el sistema de ficheros de una partición o
+#       un directorio
+#------------------------------------------------------
+# autor:	Simón Martínez <simon@cicoss.net>
+#------------------------------------------------------
+# Uso:
+# 	fstype [device | directorio]
+#
+#	si no se especifica será el directorio actual
+#
+#	Requiere del script indev
+#
+#######################################################
+
+if [ -z "$1" ]; then
+	origen=$(realpath ".")
+else
+	origen=$(realpath "$1")
+fi
+
+info=$(file -b "$origen")
+
+if [[ "$info" =~ "block special" ]]; then
+	sudo lsblk -n -o FSTYPE $origen
+	exit $?
+else
+	df -T $(indev -s "$origen") | tail -n 1 | awk '{ print $2 }'
+	exit $?
+fi
