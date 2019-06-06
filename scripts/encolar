@@ -1,0 +1,39 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+# ·
+#######################################################
+#			encolar
+#------------------------------------------------------
+#	Recompone un fichero troceado por 'trocear'
+#------------------------------------------------------
+# autor:	Simón Martínez <simon@cicoss.net>
+#------------------------------------------------------
+# Uso:
+# 	encolar nombre-fichero
+#
+#	la salida será en el directorio actual
+#######################################################
+
+if [ $# -lt 1 ]; then
+	echo "Uso:"
+	echo "$0 nombre-fichero"
+	exit 1
+fi
+
+nombre="$1"
+
+if [ -f $nombre ]; then
+	echo "El fichero ya existe. Termino"
+	exit 2
+fi
+
+echo "Encolando $nombre"
+cat "$nombre".part[0-9][0-9][0-9] > $1
+if [ $? -ne 0 ]; then
+	echo "Encolado falló"
+	exit 3
+fi
+
+echo "Verificando sumas"
+verifySHA256 "$nombre"
+exit $?

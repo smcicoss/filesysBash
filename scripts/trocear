@@ -1,0 +1,53 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+# ·
+#######################################################
+#			trocear
+#------------------------------------------------------
+#	Divide un fichero en otros de tamaño menor
+#------------------------------------------------------
+# autor:	Simón Martínez <simon@cicoss.net>
+#------------------------------------------------------
+# Uso:
+# 	trocear nombre-fichero tamaño
+#
+#	El nombre de las partes será nombre-fichero.partxxx
+#
+#	tamaño puede especificarse como entero seguido de
+#		indicadores de mutiplos K,M,G...(1024)
+#		o KB,MB,GB...(1000)
+#
+#	la salida será en el directorio actual
+#######################################################
+
+if [ $# -lt 1 ]; then
+	echo "Uso:"
+	echo "$0 nombre-fichero [tamaño]"
+	exit 1
+fi
+
+if [ ! -f "$1" ]; then
+	echo "'$1' no es un fichero o no se encuentra"
+	exit 1
+else
+	nombre="$1"
+fi
+
+if [ ! -z $2 ]; then
+	size="$2"
+else
+	size="1G"
+fi
+
+echo "Calculando la suma de verificación SHA256"
+
+#checksum "$nombre" "sha256" | cut -d " " -f 1 > "$nombre.SHA256"
+checksum "$nombre" "sha256" > "$nombre.SHA256"
+
+nsalida="$(basename "$nombre").part"
+
+echo "Troceando '$nombre' en partes de $size"
+
+split -a 3 -d -b $size "$nombre" "$nsalida"
+
+ls -lh $(basename "$nombre")*
