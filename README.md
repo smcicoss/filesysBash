@@ -26,3 +26,7 @@
 	*Monta una imagen ISO*
 - **desmontaiso**    
 	*Desmonta la imagen montada con 'montaiso'*
+- **checksum**    
+	*Genera sumas de verificación*
+- **verifySHA256**    
+	*Verifica un fichero a traves de la suma SHA256*
