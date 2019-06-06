@@ -30,3 +30,8 @@
 	*Genera sumas de verificación*
 - **verifySHA256**    
 	*Verifica un fichero a traves de la suma SHA256*
+- **trocear**    
+	*Trocea un fichero en partes del tamaño que se indique*
+- **encolar**    
+	*Encola un fichero previamente troceado*
+	
