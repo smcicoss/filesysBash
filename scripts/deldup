@@ -1,0 +1,198 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+# ·
+
+# autor: Simón Martínez [simon@cicoss.net]
+# borra o enlaza ficheros duplicados
+
+# crea directorio temporal con autoeliminación
+tmpdir=$(mktemp -d /tmp/eliminaXXXXX)
+lista="$tmpdir/ficheros.txt"
+trap "rm -fr -- "$tmpdir"" INT TERM HUP EXIT
+
+# para nombres con espacios
+oldIFS="$IFS"
+IFS=$'\n'
+
+if ! [ -z "$1" ]; then
+	dirBase="$(realpath "$1")"
+else
+	dirBase="$(realpath "./")"
+fi
+
+echo -e "\nBuscando duplicados en $dirBase"
+echo -e "Obteniendo la lista de archivos"
+
+# generamos  la lista de ficheros a comprobar
+#	el parámetro -H evita el duplicar el mismo fichero por
+#	ramas enlazadas
+find -H $dirBase -type f -name "*" -printf "%p\n" 1>"$lista" 2>/dev/null
+
+# obtenemos el número de lineas
+nlineas="$(wc -l "$tmpdir/ficheros.txt" | cut -d " " -f1)"
+
+echo -e "Total de archivos a verificar $nlineas\n"
+
+while [ "$nlineas" -gt 0 ]; do
+	# obtenemos el primer fichero de la lista
+	linea="$(head -n 1 "$tmpdir/ficheros.txt")"
+	echo "$linea"
+
+	if [ -f "$linea" ]; then
+		nombre="$(basename "$linea")"
+
+		# escapamos los caracteres corchete del nombre del fichero
+		nombre="${nombre//\[/\\\[}"
+		nombre="${nombre//\*/\\\*}"
+		nombrecompleto="${linea//\[/\\\[}"
+		nombrecompleto="${nombrecompleto//\*/\\\*}"
+		declare -a homonimos
+		# creamos una lista con todos los ficheros con el mismo nombre
+		homonimos=($(grep -e "/$nombre$" "$tmpdir/ficheros.txt" | grep -v "$nombrecompleto"))
+
+		if [ "${#homonimos[*]}" -gt 0 ]; then
+			# hay almenos otro fichero del mismo nombre
+
+			fileANT="$linea"
+			# calculamos el md5sum
+			read checkAnt _ < <(md5sum "$fileANT")
+			# nos quedamos solo con el valor
+			checkAnt="${checkAnt%% *}"
+
+			# comparamos todos los homonimos con el primero de la lista
+			for ((index=0; index < ${#homonimos[*]}; index++)); do
+				fileIN="${homonimos[$index]}"
+
+				if [ -f "$fileIN" ]; then
+
+					# calculamos el md5sum
+					read checkIN _ < <(md5sum "$fileIN")
+					# nos quedamos solo con el valor
+					checkIN="${checkIN%% *}"
+
+					if [ "$checkAnt" == "$checkIN" ]; then
+
+						# los dos ficheros son identicos.
+						echo -e "\n"
+						printf '\055%.0s' {1..80}
+						echo -e "\n"
+						echo -en "\nEl fichero \e[0;31m$(basename "$fileANT")\e[0m existe en:\n"
+						echo -en "\t\e[0;32m$(dirname "$fileANT")\e[0m\n"
+						stat "$fileANT"
+						echo -e "\ny en:"
+						echo -en "\t\e[0;32m$(dirname "$fileIN")\e[0m\n"
+						stat "$fileIN"
+
+						# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Menú
+						echo -e "\n\n"
+						echo -e "\e[0;33m0\e[0m -\tdejar como está"
+						echo -e "\e[0;33m1\e[0m -\tborrar \e[0;31m$(basename "$fileANT")\e[0m\n\t\tde \e[0;32m$(dirname "$fileANT")\e[0m"
+						echo -e "\e[0;33m2\e[0m -\tborrar \e[0;31m$(basename "$fileIN")\e[0m\n\t\tde \e[0;32m$(dirname "$fileIN")\e[0m"
+						echo -e "\e[0;33m3\e[0m -\tborrar \e[0;31m$fileIN\e[0m\n\t\ty enlazar a \e[0;32m$fileANT\e[0m"
+						echo -e "\e[0;33m4\e[0m -\tborrar \e[0;31m$fileANT\e[0m\n\t\ty enlazar a \e[0;32m$fileIN\e[0m"
+						echo -e "\e[0;33mq\e[0m -\tterminar"
+						echo -e "\n"
+						while true; do
+							read -p "pulsa la opción e <intro>: " opcion </dev/pts/0
+							case $opcion in
+								[0-4])
+									break
+									;;
+								q)
+									exit 0
+									;;
+								*)
+									continue
+									;;
+							esac
+						done
+
+						case $opcion in
+							0)
+								# no hace nada, salta al siguiente
+								break
+								;;
+							1)
+								echo -en "\e[1;33m¿Seguro que quiere borrar\e[0m \e[0;31m$fileANT\e[0m [s/n]: "
+								read confirma </dev/pts/0
+								if [ "$confirma" == "s" ] || [ "$confirma" == "S" ]; then
+									echo "Borrando $fileANT"
+									rm "$fileANT"
+									# salimos del bucle para recargar homonimos
+									break
+								else
+									# Se mantiene en la misma posición
+									let index--
+									continue
+								fi
+								;;
+							2)
+								echo -en "\e[1;33m¿Seguro que quiere borrar\e[0m \e[0;31m$fileIN\e[0m [s/n]: "
+								read confirma </dev/pts/0
+								if [ "$confirma" == "s" ] || [ "$confirma" == "S" ]; then
+									echo "Borrando $fileIN"
+									rm "$fileIN"
+									# siguente homónimo
+									continue
+								else
+									# Se mantiene en la misma posición
+									let index--
+									continue
+								fi
+								;;
+							3)
+								echo -en "\e[1;33m¿Seguro que quiere borrar\e[0m \e[0;31m$fileIN\e[0m\n\ty crear un enlace simbolico a \e[0;32m$fileANT\e[0m [s/n]: "
+								read confirma </dev/pts/0
+								if [ "$confirma" == "s" ] || [ "$confirma" == "S" ]; then
+									echo "Borrando $fileIN"
+									rm "$fileIN"
+									ln -s "$fileANT" "$(dirname "$fileIN")/"
+									# siguente homónimo
+									continue
+								else
+									# Se mantiene en la misma posición
+									let index--
+									continue
+								fi
+								;;
+							4)
+								echo -en "\e[1;33m¿Seguro que quiere borrar\e[0m \e[0;31m$fileANT\e[0m\n\ty crear un enlace simbolico a \e[0;32m$fileIN\e[0m [s/n]: "
+								read confirma </dev/pts/0
+								if [ "$confirma" == "s" ] || [ "$confirma" == "S" ]; then
+									echo "Borrando $fileANT"
+									rm "$fileANT"
+									ln -s "$fileIN" "$(dirname "$fileANT")/"
+									# siguente homónimo
+									continue
+								else
+									# Se mantiene en la misma posición
+									let index--
+									continue
+								fi
+								;;
+						esac
+						# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<fin Menú
+						echo -e "\n"
+						printf '\055%.0s' {1..80}
+						echo -e "\n"
+					fi
+				fi
+			done
+			echo -e "\n"
+			printf '\055%.0s' {1..80}
+			echo -e "\n"
+		fi
+		unset homonimos
+	fi
+
+	# borramos la primera línea del fichero
+	# este método de borrado resultó mucho más rápido que con `sed`
+	tail -n +2 "$tmpdir/ficheros.txt" >"$tmpdir/ficheros-1.txt"
+	if [ $? ]; then
+		mv -f "$tmpdir/ficheros-1.txt" "$tmpdir/ficheros.txt"
+	fi
+	# volvemos a calcular el numero de líneas
+	nlineas=$(wc -l "$tmpdir/ficheros.txt" | cut -d " " -f1)
+done < "$tmpdir/ficheros.txt"
+
+IFS=$oldIFS
