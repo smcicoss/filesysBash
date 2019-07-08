@@ -14,6 +14,16 @@ trap "rm -fr -- "$tmpdir"" INT TERM HUP EXIT
 oldIFS="$IFS"
 IFS=$'\n'
 
+if ! [ -z "$1" ] && [ "$1" == "-f" ];then
+	if ! [ -z "$2" ];then
+		force="$2"
+		shift; shift
+	else
+		force="0"
+		shift
+	fi
+fi
+
 if ! [ -z "$1" ]; then
 	dirBase="$(realpath "$1")"
 else
@@ -92,20 +102,24 @@ while [ "$nlineas" -gt 0 ]; do
 						echo -e "\e[0;33m4\e[0m -\tborrar \e[0;31m$fileANT\e[0m\n\t\ty enlazar a \e[0;32m$fileIN\e[0m"
 						echo -e "\e[0;33mq\e[0m -\tterminar"
 						echo -e "\n"
-						while true; do
-							read -p "pulsa la opción e <intro>: " opcion </dev/pts/0
-							case $opcion in
-								[0-4])
-									break
-									;;
-								q)
-									exit 0
-									;;
-								*)
-									continue
-									;;
-							esac
-						done
+						if ! [ -z $force ]; then
+							opcion=$force
+						else
+							while true; do
+								read -p "pulsa la opción e <intro>: " opcion </dev/pts/0
+								case $opcion in
+									[0-4])
+										break
+										;;
+									q)
+										exit 0
+										;;
+									*)
+										continue
+										;;
+								esac
+							done
+						fi
 
 						case $opcion in
 							0)
@@ -113,61 +127,79 @@ while [ "$nlineas" -gt 0 ]; do
 								break
 								;;
 							1)
-								echo -en "\e[1;33m¿Seguro que quiere borrar\e[0m \e[0;31m$fileANT\e[0m [s/n]: "
-								read confirma </dev/pts/0
-								if [ "$confirma" == "s" ] || [ "$confirma" == "S" ]; then
-									echo "Borrando $fileANT"
-									rm "$fileANT"
-									# salimos del bucle para recargar homonimos
-									break
+								if ! [ -z $force ]; then
+									rm -fv "$fileANT"
 								else
-									# Se mantiene en la misma posición
-									let index--
-									continue
+									echo -en "\e[1;33m¿Seguro que quiere borrar\e[0m \e[0;31m$fileANT\e[0m [s/n]: "
+									read confirma </dev/pts/0
+									if [ "$confirma" == "s" ] || [ "$confirma" == "S" ]; then
+										echo "Borrando $fileANT"
+										rm "$fileANT"
+										# salimos del bucle para recargar homonimos
+										break
+									else
+										# Se mantiene en la misma posición
+										let index--
+										continue
+									fi
 								fi
 								;;
 							2)
-								echo -en "\e[1;33m¿Seguro que quiere borrar\e[0m \e[0;31m$fileIN\e[0m [s/n]: "
-								read confirma </dev/pts/0
-								if [ "$confirma" == "s" ] || [ "$confirma" == "S" ]; then
-									echo "Borrando $fileIN"
-									rm "$fileIN"
-									# siguente homónimo
-									continue
+								if ! [ -z $force ]; then
+									rm -fv "$fileIN"
 								else
-									# Se mantiene en la misma posición
-									let index--
-									continue
+									echo -en "\e[1;33m¿Seguro que quiere borrar\e[0m \e[0;31m$fileIN\e[0m [s/n]: "
+									read confirma </dev/pts/0
+									if [ "$confirma" == "s" ] || [ "$confirma" == "S" ]; then
+										echo "Borrando $fileIN"
+										rm "$fileIN"
+										# siguente homónimo
+										continue
+									else
+										# Se mantiene en la misma posición
+										let index--
+										continue
+									fi
 								fi
 								;;
 							3)
-								echo -en "\e[1;33m¿Seguro que quiere borrar\e[0m \e[0;31m$fileIN\e[0m\n\ty crear un enlace simbolico a \e[0;32m$fileANT\e[0m [s/n]: "
-								read confirma </dev/pts/0
-								if [ "$confirma" == "s" ] || [ "$confirma" == "S" ]; then
-									echo "Borrando $fileIN"
-									rm "$fileIN"
+								if ! [ -z $force ]; then
+									rm -fv "$fileIN"
 									ln -s "$fileANT" "$(dirname "$fileIN")/"
-									# siguente homónimo
-									continue
 								else
-									# Se mantiene en la misma posición
-									let index--
-									continue
+									echo -en "\e[1;33m¿Seguro que quiere borrar\e[0m \e[0;31m$fileIN\e[0m\n\ty crear un enlace simbolico a \e[0;32m$fileANT\e[0m [s/n]: "
+									read confirma </dev/pts/0
+									if [ "$confirma" == "s" ] || [ "$confirma" == "S" ]; then
+										echo "Borrando $fileIN"
+										rm "$fileIN"
+										ln -s "$fileANT" "$(dirname "$fileIN")/"
+										# siguente homónimo
+										continue
+									else
+										# Se mantiene en la misma posición
+										let index--
+										continue
+									fi
 								fi
 								;;
 							4)
-								echo -en "\e[1;33m¿Seguro que quiere borrar\e[0m \e[0;31m$fileANT\e[0m\n\ty crear un enlace simbolico a \e[0;32m$fileIN\e[0m [s/n]: "
-								read confirma </dev/pts/0
-								if [ "$confirma" == "s" ] || [ "$confirma" == "S" ]; then
-									echo "Borrando $fileANT"
-									rm "$fileANT"
+								if ! [ -z $force ]; then
+									rm -fv "$fileANT"
 									ln -s "$fileIN" "$(dirname "$fileANT")/"
-									# siguente homónimo
-									continue
 								else
-									# Se mantiene en la misma posición
-									let index--
-									continue
+									echo -en "\e[1;33m¿Seguro que quiere borrar\e[0m \e[0;31m$fileANT\e[0m\n\ty crear un enlace simbolico a \e[0;32m$fileIN\e[0m [s/n]: "
+									read confirma </dev/pts/0
+									if [ "$confirma" == "s" ] || [ "$confirma" == "S" ]; then
+										echo "Borrando $fileANT"
+										rm "$fileANT"
+										ln -s "$fileIN" "$(dirname "$fileANT")/"
+										# siguente homónimo
+										continue
+									else
+										# Se mantiene en la misma posición
+										let index--
+										continue
+									fi
 								fi
 								;;
 						esac
