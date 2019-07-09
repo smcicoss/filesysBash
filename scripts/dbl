@@ -1,0 +1,15 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+# ·
+
+# autor: Simón Martínez [simon@cicoss.net]
+# deletes broken links
+# borra enlaces rotos
+
+if [ -z "$1" ]; then
+	destino="."
+else
+	destino="$1"
+fi
+
+find -L "$destino" -type l -print -delete
