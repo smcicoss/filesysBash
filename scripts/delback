@@ -1,0 +1,15 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+# ·
+
+# autor: Simón Martínez [simon@cicoss.net]
+# deletes backups
+# borra ficheros de respaldo
+
+if [ -z "$1" ]; then
+	destino="."
+else
+	destino="$1"
+fi
+
+find "$destino" -type f -iname "*~" -print -delete
