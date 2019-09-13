@@ -1,0 +1,53 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+# ·
+#######################################################
+#					renimagen
+#------------------------------------------------------
+# renombra imagen con prefijo-dimensiones-fecha-subfijo
+#------------------------------------------------------
+# autor:	Simón Martínez <simon@cicoss.net>
+#######################################################
+
+while [ $# -gt 0 ]; do
+	if [ $1 == "-p" ];then
+		shift
+		prefijo="$1-"
+		shift
+	elif [ $1 == "-s" ]; then
+		shift
+		subfijo="-$1"
+		shift
+	elif [ $1 == "-e" ]; then
+		shift
+		ext="*.$1"
+		shift
+	else
+		cond="$1"
+		shift
+	fi
+done;
+
+: ${prefijo=""}
+: ${subfijo=""}
+: ${ext="*"}
+: ${cond=".*"}
+
+oldIFS="$IFS"
+IFS=$'\n'
+
+echo "\$(find . -maxdepth 1 -type f -iname "$ext" | grep -e "$cond")"
+echo ""
+
+for arch in $(find . -maxdepth 1 -type f -iname "$ext" | grep -e "$cond"); do
+	dimensiones="$(identify -format "%wx%h" "$arch")-"
+	newname="$(stat -c '%y' "$arch").${arch##*.}"
+	newname="$(basename "$newname")"
+	newname="${newname%.*}"
+	extension="${arch##*.}"
+	newname="$prefijo$dimensiones${newname//:/.}$subfijo.$extension"
+	#echo "$arch -> $newname"
+	mv -nv "$arch" "$newname"
+done
+
+IFS=$oldIFS
