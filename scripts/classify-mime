@@ -57,7 +57,6 @@ for file in $source/**; do
         clase="${mimefile%/*}"
         type="${mimefile#*/}"
         if [[ "$mimefile" == *"$mime"* ]]; then
-            #printf "clase: %-10s\ttype: %-30s\n" "$clase" "$type"
             $comando "$file"
         fi
     fi

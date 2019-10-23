@@ -11,6 +11,12 @@
 
 ahora=$(date)
 
+if [ -z $1 ] || [ "$1" != "-s" ]; then
+	ordena="NO"
+else
+	ordena="SI"
+fi
+
 printf '\055%.0s' {1..80}
 
 echo -en "\n\e[1;37m"
@@ -32,8 +38,11 @@ done
 tmpfile2=$(mktemp /tmp/DispositivosMontadosSort.XXXXXX)
 trap "rm -f -- "$tmpfile2"" INT TERM HUP EXIT
 
-#cat $tmpfile1 | sort -k2 >>$tmpfile2
-cat $tmpfile1 >>$tmpfile2
+if [ "$ordena" == "SI" ]; then
+	cat $tmpfile1 | sort -k2 >>$tmpfile2
+else
+	cat $tmpfile1 >>$tmpfile2
+fi
 
 while read linea; do
    printf "%-30s -> %s\n" $linea
