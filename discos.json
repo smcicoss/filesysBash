@@ -1,0 +1,311 @@
+{
+   "blockdevices": [
+      {
+         "name": "/dev/loop0",
+         "fstype": "squashfs",
+         "label": null,
+         "uuid": null,
+         "fsavail": "0",
+         "fsuse%": "100%",
+         "mountpoint": "/snap/core18/1265"
+      },
+      {
+         "name": "/dev/loop1",
+         "fstype": "squashfs",
+         "label": null,
+         "uuid": null,
+         "fsavail": "0",
+         "fsuse%": "100%",
+         "mountpoint": "/snap/snapd/5754"
+      },
+      {
+         "name": "/dev/loop2",
+         "fstype": "squashfs",
+         "label": null,
+         "uuid": null,
+         "fsavail": "0",
+         "fsuse%": "100%",
+         "mountpoint": "/snap/core18/1279"
+      },
+      {
+         "name": "/dev/loop3",
+         "fstype": "squashfs",
+         "label": null,
+         "uuid": null,
+         "fsavail": "0",
+         "fsuse%": "100%",
+         "mountpoint": "/snap/snapd/5643"
+      },
+      {
+         "name": "/dev/loop4",
+         "fstype": "squashfs",
+         "label": null,
+         "uuid": null,
+         "fsavail": "0",
+         "fsuse%": "100%",
+         "mountpoint": "/snap/eric-ide/73"
+      },
+      {
+         "name": "/dev/sda",
+         "fstype": null,
+         "label": null,
+         "uuid": null,
+         "fsavail": null,
+         "fsuse%": null,
+         "mountpoint": null,
+         "children": [
+            {
+               "name": "/dev/sda1",
+               "fstype": null,
+               "label": null,
+               "uuid": null,
+               "fsavail": null,
+               "fsuse%": null,
+               "mountpoint": null
+            },
+            {
+               "name": "/dev/sda2",
+               "fstype": "swap",
+               "label": "swap",
+               "uuid": "6ba55b0e-3a2d-4116-a8bb-1a139693eae1",
+               "fsavail": null,
+               "fsuse%": null,
+               "mountpoint": "[SWAP]"
+            },
+            {
+               "name": "/dev/sda3",
+               "fstype": "ext4",
+               "label": "raiz",
+               "uuid": "1407ba7d-6b40-433f-91e0-72f207acbb50",
+               "fsavail": "7,2G",
+               "fsuse%": "76%",
+               "mountpoint": "/"
+            },
+            {
+               "name": "/dev/sda4",
+               "fstype": "ext4",
+               "label": "home",
+               "uuid": "9dbcfe1f-f9e5-4586-b5d9-59a8bec80dc7",
+               "fsavail": "39,3G",
+               "fsuse%": "37%",
+               "mountpoint": "/home"
+            }
+         ]
+      },
+      {
+         "name": "/dev/sdb",
+         "fstype": null,
+         "label": null,
+         "uuid": null,
+         "fsavail": null,
+         "fsuse%": null,
+         "mountpoint": null,
+         "children": [
+            {
+               "name": "/dev/sdb1",
+               "fstype": "xfs",
+               "label": "datos",
+               "uuid": "8c9ea97a-6489-46af-bd5c-d3e194f97c4d",
+               "fsavail": "223,1G",
+               "fsuse%": "0%",
+               "mountpoint": "/srv/datos/BDs"
+            }
+         ]
+      },
+      {
+         "name": "/dev/sdc",
+         "fstype": null,
+         "label": null,
+         "uuid": null,
+         "fsavail": null,
+         "fsuse%": null,
+         "mountpoint": null,
+         "children": [
+            {
+               "name": "/dev/sdc1",
+               "fstype": "crypto_LUKS",
+               "label": null,
+               "uuid": "26234a53-5c2b-4651-aafd-09ba6dcf9c70",
+               "fsavail": null,
+               "fsuse%": null,
+               "mountpoint": null,
+               "children": [
+                  {
+                     "name": "/dev/mapper/home-2",
+                     "fstype": "ext4",
+                     "label": "home-2",
+                     "uuid": "b82c67f8-af9e-474c-b8bc-f766afe20d46",
+                     "fsavail": "119,9G",
+                     "fsuse%": "40%",
+                     "mountpoint": "/home/simo/Datos/home-2"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "name": "/dev/sdd",
+         "fstype": null,
+         "label": null,
+         "uuid": null,
+         "fsavail": null,
+         "fsuse%": null,
+         "mountpoint": null,
+         "children": [
+            {
+               "name": "/dev/sdd1",
+               "fstype": "ext4",
+               "label": "MyBook",
+               "uuid": "5b975988-034c-407c-9334-e2e31d4653a9",
+               "fsavail": "380,9G",
+               "fsuse%": "90%",
+               "mountpoint": "/home/simo/Datos/MyBook"
+            }
+         ]
+      },
+      {
+         "name": "/dev/sde",
+         "fstype": null,
+         "label": null,
+         "uuid": null,
+         "fsavail": null,
+         "fsuse%": null,
+         "mountpoint": null,
+         "children": [
+            {
+               "name": "/dev/sde1",
+               "fstype": "crypto_LUKS",
+               "label": null,
+               "uuid": "ed3ed3c8-2839-4456-afa7-c8f5338203be",
+               "fsavail": null,
+               "fsuse%": null,
+               "mountpoint": null,
+               "children": [
+                  {
+                     "name": "/dev/mapper/FreeAgent",
+                     "fstype": "ext4",
+                     "label": "FreeAgent",
+                     "uuid": "f5468c2d-93c4-481f-837e-73ec705fbaa8",
+                     "fsavail": "398,9G",
+                     "fsuse%": "8%",
+                     "mountpoint": "/home/simo/Datos/FreeAgent"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "name": "/dev/sdf",
+         "fstype": null,
+         "label": null,
+         "uuid": null,
+         "fsavail": null,
+         "fsuse%": null,
+         "mountpoint": null,
+         "children": [
+            {
+               "name": "/dev/sdf1",
+               "fstype": "ext4",
+               "label": "Trasportin",
+               "uuid": "8913ff34-f048-4c0a-a2df-766664f32ccc",
+               "fsavail": "290,7G",
+               "fsuse%": "63%",
+               "mountpoint": "/home/simo/Datos/Trasportin"
+            }
+         ]
+      },
+      {
+         "name": "/dev/sdg",
+         "fstype": null,
+         "label": null,
+         "uuid": null,
+         "fsavail": null,
+         "fsuse%": null,
+         "mountpoint": null,
+         "children": [
+            {
+               "name": "/dev/sdg1",
+               "fstype": "crypto_LUKS",
+               "label": null,
+               "uuid": "e3a1a03d-923c-4c0f-a579-a304a1a02cbe",
+               "fsavail": null,
+               "fsuse%": null,
+               "mountpoint": null,
+               "children": [
+                  {
+                     "name": "/dev/mapper/Backup1",
+                     "fstype": "ext4",
+                     "label": "BACKUP1",
+                     "uuid": "31c9a261-7247-4e9f-af0d-7248109dcec5",
+                     "fsavail": "273,6G",
+                     "fsuse%": "65%",
+                     "mountpoint": "/srv/datos/Backup1"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "name": "/dev/sdh",
+         "fstype": null,
+         "label": null,
+         "uuid": null,
+         "fsavail": null,
+         "fsuse%": null,
+         "mountpoint": null,
+         "children": [
+            {
+               "name": "/dev/sdh1",
+               "fstype": "crypto_LUKS",
+               "label": null,
+               "uuid": "3e9e4f4f-f7c2-44c3-8f84-f78c678cbeb2",
+               "fsavail": null,
+               "fsuse%": null,
+               "mountpoint": null,
+               "children": [
+                  {
+                     "name": "/dev/mapper/DiscoA",
+                     "fstype": "xfs",
+                     "label": "DiscoA",
+                     "uuid": "95a60b52-c9fc-4a63-a295-a10928484f1a",
+                     "fsavail": "281,2G",
+                     "fsuse%": "40%",
+                     "mountpoint": "/home/simo/Datos/DiscoA"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "name": "/dev/sdi",
+         "fstype": null,
+         "label": null,
+         "uuid": null,
+         "fsavail": null,
+         "fsuse%": null,
+         "mountpoint": null,
+         "children": [
+            {
+               "name": "/dev/sdi1",
+               "fstype": "crypto_LUKS",
+               "label": null,
+               "uuid": "93595b01-96ab-4367-bc97-0b489e738cf9",
+               "fsavail": null,
+               "fsuse%": null,
+               "mountpoint": null,
+               "children": [
+                  {
+                     "name": "/dev/mapper/DiscoB",
+                     "fstype": "xfs",
+                     "label": "DiscoB",
+                     "uuid": "39e9e5ec-fc6c-4b38-91e4-6aac24bc8bd1",
+                     "fsavail": "280,4G",
+                     "fsuse%": "40%",
+                     "mountpoint": "/home/simo/Datos/DiscoB"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
