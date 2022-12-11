@@ -1,24 +1,24 @@
 #! /bin/bash
 # -*- ENCODING: UTF-8 -*-
-#·
+# ·
 #######################################################
-#			        lsusbdiscs
+#					selereg
 #------------------------------------------------------
-#	Lista los discos usb
+#	selecciona nombre de ficheros con exp. regulares
 #------------------------------------------------------
 # autor:	Simón Martínez <simon@cicoss.net>
 #######################################################
 
-ahora=$(date)
+if [ -z $1 ]; then
+	echo "Introduzca una expresión"
+	exit 1
+fi
 
-printf '\055%.0s' {1..80}
+oldIFS="$IFS"
+IFS=$'\n'
 
-echo -en "\n\e[1;37m"
-printf '%-40s%40s' "$0" "$ahora"
-echo -en "\e[0m\n"
+for arch in $(find . -maxdepth 1 -type f -iname "*.jpg" | grep "[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}[ |_]");do 
+	echo "$arch"; 
+done
 
-printf '\055%.0s' {1..80}; echo ""
-
-lsblk -o NAME,TYPE,SIZE,MODEL,MOUNTPOINT
-
-printf '\055%.0s' {1..80}; echo ""
+IFS=$oldIFS

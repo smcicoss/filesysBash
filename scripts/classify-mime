@@ -1,0 +1,63 @@
+#! /bin/bash
+# -*- ENCODING: UTF-8 -*-
+#·
+#######################################################
+#			        classify-mime
+#------------------------------------------------------
+#	Clasifica (copia/mueve) ficheros por tipo MIME
+#------------------------------------------------------
+#	Uso:
+#		classify-mime mime origen target [-m]
+#------------------------------------------------------
+# autor:	Simón Martínez <simon@cicoss.net>
+# fecha:	vie sep 13 08:12:37 CEST 2019
+#######################################################
+
+if [[ "$1" == "-m" ]]; then
+    mueve=0
+    shift
+else
+    mueve=1
+fi
+
+if [ -z $3 ]; then
+    echo -e "\e[0;31mDebe especificar [-m] tipo-mime, origen y destino\e[0m" >&2
+    exit 1
+fi
+
+
+mime="$1"
+source="$2"
+target="$3"
+
+if [ ! -d $source ]; then
+    echo -e "\e[0;31mEl origen '$source' no existe\e[0m" >&2
+    exit 2
+fi
+
+install -d "$target"
+target="$(realpath "$target")"
+
+if [ $mueve -eq 0 ]; then
+    echo -e "\e[0;33mMover ficheros de tipo '$1' desde '$2' a '$3'\e[0m"
+    comando="mv -vn -t $target "
+else
+    echo -e "\e[0;32mCopia ficheros de tipo '$1' desde '$2' a '$3'\e[0m"
+    comando="cp -anv -t $target"
+fi
+
+shopt -s globstar
+
+# | cut -d "/" -f 2 | sort -u
+
+for file in $source/**; do
+    file="$(realpath "$file")"
+    if [ -f "$file" ]; then
+        mimefile="$(file -b --mime-type "$file")"
+        clase="${mimefile%/*}"
+        type="${mimefile#*/}"
+        if [[ "$mimefile" == *"$mime"* ]]; then
+            $comando "$file"
+        fi
+    fi
+done
